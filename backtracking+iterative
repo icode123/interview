@@ -1,0 +1,100 @@
+//回溯迭代版，相当于n-way叉树的迭代版。
+
+//n皇后、全排列等都可以使用。
+
+//主要针对的是全排列问题，无重复。
+
+#define NUM 4 
+
+char arr[NUM]={'A','B','B','C'};
+bool canUse[NUM]; 
+int res[NUM];
+int total=0;
+
+void init()  
+{
+	int i;
+	for (i=0;i<NUM;i++)
+	{
+		res[i]=-1;
+		canUse[i]=true;
+	}
+} 
+
+bool valid(int num) 
+{
+	if (canUse[num]==true && num<NUM)
+	{
+		return true;
+	}
+	return false;
+} 
+
+void print()   
+{
+	int i;
+	for (i=0;i<NUM;i++)
+	{
+		printf("%c",arr[res[i]]);
+	}
+	printf("\n");
+}
+
+void permutation()      
+{
+	int i=0,j=0;
+	while (i<NUM)
+	{
+		while (j<NUM)
+		{
+			if (valid(j))
+			{
+				res[i]=j;
+				canUse[j]=false;
+				j=0;
+				break;
+			}
+			else j++;
+		}
+		if (res[i]==-1)
+		{
+			if (i==0)
+			{
+				break;
+			}
+			else
+			{
+				i--;
+				j=res[i]+1;
+				canUse[res[i]]=true;
+				res[i]=-1;
+				continue;
+			}
+		}
+		if (i==NUM-1)
+		{
+			print();
+			total++;
+			j=res[i]+1;
+			canUse[res[i]]=true;
+			res[i]=-1;
+			continue;
+		}
+		i++;
+	}
+}
+//全排列，有重复。
+//有重复问题，先将序列排序，然后修改bool valid()函数。
+
+bool valid(int num) 
+{
+	if (num>0 && num<NUM && arr[num]==arr[num-1] && canUse[num-1]==true)
+	{
+		return false;
+	}
+	if (canUse[num]==true && num<NUM)
+	{
+		return true;
+	}
+	return false;
+} 
